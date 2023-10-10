@@ -7,8 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node --watch server.js"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +15,8 @@
   "dependencies": {
     "compression": "^1.7.4",
     "express": "^4.18.2",
-    "helmet": "^7.0.0"
+    "helmet": "^7.0.0",
+    "mongoose": "^7.6.1"
   },
   "devDependencies": {
     "morgan": "^1.10.0"

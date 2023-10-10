@@ -11,6 +11,9 @@ app.use(helmet())
 app.use(compression())
 
 // DB
+require("./dbs/init.mongodb")
+const { checkOverload } = require("./helpers/check.connect")
+checkOverload()
 
 // Routes
 app.get("/", (req,res, next) => {
