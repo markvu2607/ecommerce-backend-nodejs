@@ -1,7 +1,7 @@
 "use strict"
 
 const express = require("express")
-const { apiKey, permission } = require("../auth/checkAuth")
+const { apiKey, permission, asyncHandler } = require("../auth/checkAuth")
 
 const router = express.Router()
 
@@ -11,9 +11,9 @@ router.get("/", (req, res, next) => {
   })
 })
 
-router.use(apiKey)
+router.use(asyncHandler(apiKey))
 
-router.use(permission("API_KEY_FREE"))
+router.use(asyncHandler(permission("API_KEY_FREE")))
 
 router.use("/v1/api", require("./access"))
 

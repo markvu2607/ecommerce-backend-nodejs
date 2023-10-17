@@ -41,26 +41,15 @@ class AccessService {
       })
 
       if(!keyStore) {
-        return {
-          code: "XXXXX",
-          message: "keyStore error!"
-        }
+        throw new BadRequestError("keyStore error!")
       }
 
       const tokens = await createTokenPair({userId: newShop._id, email}, publicKey, privateKey)
 
       return {
-        code: "200",
-        message: {
-          shop: getInfoData({fields: ["_id", "name","email"], object: newShop}),
-          tokens
-        }
+        shop: getInfoData({fields: ["_id", "name","email"], object: newShop}),
+        tokens
       }
-    }
-
-    return {
-      code: 200,
-      metadata: null
     }
   }
 }
