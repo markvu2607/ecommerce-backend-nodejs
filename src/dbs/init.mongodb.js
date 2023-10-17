@@ -3,7 +3,7 @@
 const mongoose = require("mongoose")
 const { checkOverload } = require("../helpers/check.connect")
 
-const connectString = "mongodb://localhost:27017"
+const connectString = "mongodb://localhost:27017/shop"
 
 class Database {
   constructor() {

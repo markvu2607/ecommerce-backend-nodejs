@@ -10,17 +10,16 @@ const app = express()
 app.use(morgan("dev"))
 app.use(helmet())
 app.use(compression())
+app.use(express.json())
+app.use(express.urlencoded({
+  extended: true
+}))
 
 // DB
 require("./dbs/init.mongodb")
 
 // Routes
-app.get("/", (req,res, next) => {
-  return res.status(200).json({
-    message: "Welcome!",
-    metadata: "Welcome ".repeat(100000)
-  })
-})
+app.use("", require("./routes"))
 
 // Handling error
 
