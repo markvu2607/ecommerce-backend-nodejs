@@ -4,9 +4,9 @@ const shopModel = require("../models/shop.model")
 const bcrypt = require("bcrypt")
 const crypto = require("node:crypto")
 const KeyTokenService = require("./keyToken.service")
-const { createTokenPair } = require("../auth/authUtils")
+const { createTokenPair, verifyJWT } = require("../auth/authUtils")
 const { getInfoData } = require("../utils")
-const { BadRequestError, AuthFailureError } = require("../core/error.response")
+const { BadRequestError, UnauthorizedError, ForbiddenError } = require("../core/error.response")
 const ShopService = require("./shop.service")
 
 const RoleShop = {
@@ -25,7 +25,7 @@ class AccessService {
 
     const match = await bcrypt.compare( password, foundShop.password)
 
-    if(!match) throw new AuthFailureError("Authentication error!")
+    if(!match) throw new UnauthorizedError("Authentication error!")
 
     const privateKey = crypto.randomBytes(64).toString("hex")
     const publicKey = crypto.randomBytes(64).toString("hex")
@@ -82,11 +82,38 @@ class AccessService {
   }
 
   static logout = async (keyStore) => {
-    const delKey = await KeyTokenService.removeKeyById(keyStore._id)
+    return await KeyTokenService.removeKeyById(keyStore._id)
+  }
 
-    console.log({delKey})
+  static handleRefreshToken = async ({refreshToken, user, keyStore}) => {
+    const {userId, email} = user;
 
-    return delKey
+    if(keyStore.refreshTokensUsed.includes(refreshToken)) {
+      await KeyTokenService.deleteKeyById(userId)
+      throw new ForbiddenError("Something went wrong! Please relogin!")
+    }
+
+    if(keyStore.refreshToken !== refreshToken) throw new UnauthorizedError("Shop is not registered!")
+
+    const foundShop = await ShopService.findByEmail({email})
+
+    if(!foundShop) throw new UnauthorizedError("Shop is not registered!")
+
+    const tokens = await createTokenPair({userId, email}, keyStore.publicKey, keyStore.privateKey)
+
+    await keyStore.updateOne({
+      $set: {
+        refreshToken: tokens.refreshToken
+      },
+      $addToSet: {
+        refreshTokensUsed: refreshToken
+      }
+    })
+
+    return {
+      user,
+      tokens
+    }
   }
 }
 
