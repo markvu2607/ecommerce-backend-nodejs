@@ -2,11 +2,9 @@
 
 const { ForbiddenRequestError } = require("../core/error.response")
 const {findById} = require("../services/apiKey.service")
+const { HEADER } = require("./constants")
 
-const HEADER = {
-  API_KEY: "x-api-key",
-  AUTHORIZATION: "authorization"
-}
+
 
 const apiKey = async (req, res, next) => {
   const key = req.headers[HEADER.API_KEY]?.toString()
@@ -43,14 +41,7 @@ const permission = (permission) => {
   }
 }
 
-const asyncHandler = fn => {
-  return (req, res, next) => {
-    fn(req, res, next).catch(next)
-  }
-}
-
 module.exports = {
   apiKey,
-  permission,
-  asyncHandler
+  permission
 }

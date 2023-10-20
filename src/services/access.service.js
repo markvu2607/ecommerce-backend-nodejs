@@ -43,7 +43,6 @@ class AccessService {
       shop: getInfoData({fields: ["_id", "name","email"], object: foundShop}),
       tokens
     }
-
   }
 
   static signUp = async ({name, email, password}) => {
@@ -80,6 +79,14 @@ class AccessService {
         tokens
       }
     }
+  }
+
+  static logout = async (keyStore) => {
+    const delKey = await KeyTokenService.removeKeyById(keyStore._id)
+
+    console.log({delKey})
+
+    return delKey
   }
 }
 
