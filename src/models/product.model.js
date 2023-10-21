@@ -25,7 +25,7 @@ const clothingSchema = new Schema({
   size: String,
   material: String,
 }, {
-  collection: "clothes",
+  collection: "Clothes",
   timestamps: true
 })
 
@@ -35,7 +35,7 @@ const electronicSchema = new Schema({
   size: String,
   material: String,
 }, {
-  collection: "electronics",
+  collection: "Electronics",
   timestamps: true
 })
 
@@ -43,5 +43,5 @@ const electronicSchema = new Schema({
 module.exports = {
   product: model(DOCUMENT_NAME, productSchema),
   clothing: model("Clothing", clothingSchema),
-  electronic: model("Electronics", electronicSchema)
+  electronic: model("Electronic", electronicSchema)
 }
