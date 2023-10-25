@@ -1,6 +1,7 @@
 "use strict"
 
 const {Schema, model} = require("mongoose")
+const slugify = require("slugify")
 
 const DOCUMENT_NAME = "Product"
 const COLLECTION_NAME = "Products"
@@ -30,6 +31,12 @@ const productSchema = new Schema({
   collection: COLLECTION_NAME
 })
 
+//Document middleware: run before .save() and .create()
+// Webhooks
+productSchema.pre("save", function ( next ) {
+  this.product_slug = slugify(this.product_name, {lower: true})
+  next()
+})
 
 const clothingSchema = new Schema({
   brand: {type: String, required: true},
