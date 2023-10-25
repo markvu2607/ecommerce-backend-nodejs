@@ -16,7 +16,7 @@ router.use(asyncHandler(apiKey))
 
 router.use(asyncHandler(permission("API_KEY_FREE")))
 
-router.use("/v1/api", require("./access"))
+router.use("/v1/api/auth", require("./access"))
 router.use("/v1/api/product", require("./product"))
 
 module.exports = router

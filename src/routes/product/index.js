@@ -11,4 +11,6 @@ router.use(asyncHandler(authentication))
 
 router.post("",asyncHandler(productController.createProduct))
 
+router.get("/drafts/all",asyncHandler(productController.getAllDraftsForShop))
+
 module.exports = router

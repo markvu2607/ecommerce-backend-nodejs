@@ -10,6 +10,13 @@ class ProductController {
       metadata: await ProductService.createProduct(req.body.product_type, {...req.body, product_shop : req.user.userId})
     }).send(res)
   }
+
+  getAllDraftsForShop = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Get list success",
+      metadata: await ProductService.findAllDraftsForShop({ product_shop : req.user.userId})
+    }).send(res)
+  }
 }
 
 module.exports = new ProductController()
