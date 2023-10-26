@@ -10,7 +10,10 @@ const router = express.Router()
 router.use(asyncHandler(authentication))
 
 router.post("",asyncHandler(productController.createProduct))
+router.post("/publish/:id",asyncHandler(productController.publishProductByShop))
+router.post("/unpublish/:id",asyncHandler(productController.unpublishProductByShop))
 
 router.get("/drafts/all",asyncHandler(productController.getAllDraftsForShop))
+router.get("/published/all",asyncHandler(productController.getAllPublishedForShop))
 
 module.exports = router

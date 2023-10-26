@@ -13,8 +13,29 @@ class ProductController {
 
   getAllDraftsForShop = async (req, res, next) => {
     new SuccessResponse({
-      message: "Get list success",
+      message: "Get list draft success!",
       metadata: await ProductService.findAllDraftsForShop({ product_shop : req.user.userId})
+    }).send(res)
+  }
+
+  getAllPublishedForShop = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Get list publish success!",
+      metadata: await ProductService.findAllPublishedForShop({ product_shop : req.user.userId})
+    }).send(res)
+  }
+
+  publishProductByShop = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Publish success!",
+      metadata: await ProductService.publishProductByShop({ product_shop : req.user.userId, product_id: req.params.id})
+    }).send(res)
+  }
+
+  unpublishProductByShop = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Unpublish success!",
+      metadata: await ProductService.unpublishProductByShop({ product_shop : req.user.userId, product_id: req.params.id})
     }).send(res)
   }
 }
