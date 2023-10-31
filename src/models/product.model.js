@@ -31,6 +31,8 @@ const productSchema = new Schema({
   collection: COLLECTION_NAME
 })
 
+productSchema.index({product_name: "text", product_description: "text"})
+
 //Document middleware: run before .save() and .create()
 // Webhooks
 productSchema.pre("save", function ( next ) {

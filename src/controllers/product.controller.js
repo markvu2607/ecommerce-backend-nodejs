@@ -38,6 +38,13 @@ class ProductController {
       metadata: await ProductService.unpublishProductByShop({ product_shop : req.user.userId, product_id: req.params.id})
     }).send(res)
   }
+
+  getListSearchProduct = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Get list search product!",
+      metadata: await ProductService.getListSearchProduct(req.params)
+    }).send(res)
+  }
 }
 
 module.exports = new ProductController()

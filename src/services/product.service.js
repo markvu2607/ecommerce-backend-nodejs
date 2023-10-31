@@ -6,7 +6,8 @@ const {
   findAllDraftsForShop,
   findAllPublishedForShop,
   publishProductByShop,
-  unpublishProductByShop
+  unpublishProductByShop,
+  searchProductByUser
 } = require("../models/repositories/product.repo")
 
 class ProductFactory {
@@ -41,6 +42,10 @@ class ProductFactory {
 
   static async unpublishProductByShop ({product_shop, product_id}) {
     return await unpublishProductByShop({product_shop, product_id})
+  }
+
+  static async getListSearchProduct ({keySearch}) {
+    return await searchProductByUser({keySearch})
   }
 }
 
