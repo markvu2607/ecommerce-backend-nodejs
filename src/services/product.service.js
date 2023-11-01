@@ -9,8 +9,10 @@ const {
   unpublishProductByShop,
   searchProductByUser,
   findAllProducts,
-  findProduct
+  findProduct,
+  updateProductById
 } = require("../models/repositories/product.repo")
+const { removeUndefinedObject, updateNestedObjectParser } = require("../utils")
 
 class ProductFactory {
 
@@ -28,12 +30,12 @@ class ProductFactory {
     return new ProductClass(payload).createProduct()
   }
 
-  static async updateProduct (type, payload) {
+  static async updateProduct (type, product_id, payload) {
     const ProductClass = ProductFactory.productRegistry[type]
 
     if(!ProductClass) throw new BadRequestError(`Invalid Product type: ${type}`)
 
-    return new ProductClass(payload).createProduct()
+    return new ProductClass(payload).updateProduct(product_id)
   }
 
   static async findAllDraftsForShop ({product_shop, limit = 50, skip = 0}) {
@@ -83,6 +85,10 @@ class Product {
   async createProduct (product_id) {
     return await product.create({...this, _id: product_id})
   }
+
+  async updateProduct ( product_id, payload ) {
+    return await updateProductById({product_id, payload, model: product})
+  }
 }
 
 class Clothing extends Product {
@@ -94,6 +100,17 @@ class Clothing extends Product {
     if(!newProduct) throw new BadRequestError("create new clothing error")
 
     return newProduct
+  }
+
+  async updateProduct (product_id) {
+    const payload = removeUndefinedObject(this)
+
+    if(payload.product_attributes) {
+      await updateProductById({product_id, payload: updateNestedObjectParser(payload.product_attributes), model: clothing})
+    }
+
+    const updateProduct = await super.updateProduct(product_id, updateNestedObjectParser(payload))
+    return updateProduct
   }
 }
 
